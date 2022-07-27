@@ -1,4 +1,4 @@
-import {Injectable, InternalServerErrorException } from '@nestjs/common';
+import {Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
@@ -27,14 +27,21 @@ export class PlayersService {
   }
 
   async findAll(userId: string): Promise<Player> {
-    console.log(`gonna find all players belonging to ${userId}`);
     const response = await this.prisma.player.findMany();
-    console.log(response);
+    if(!response) throw new NotFoundException();
     return response;
   }
 
-  findOne(id: number) {
-    return `This action returnsss a #${id} player`;
+  async findOne(id: string) {
+    const response = await this.prisma.player.findUnique({
+      where:{
+        id: id,
+      }
+    });
+    if(!response) throw new NotFoundException();
+
+    return response;
+    
   }
 
   update(id: number, updatePlayerDto: UpdatePlayerDto) {

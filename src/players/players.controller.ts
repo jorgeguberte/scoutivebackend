@@ -26,8 +26,9 @@ export class PlayersController {
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   findOne(@Param('id') id: string) {
-    return this.playersService.findOne(+id);
+    return this.playersService.findOne(id);
   }
 
   @Patch(':id')
