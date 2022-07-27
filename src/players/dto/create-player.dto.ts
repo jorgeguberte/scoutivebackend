@@ -1,9 +1,22 @@
-export class CreatePlayerDto {
-    name: string;
-    position: string;
-    foot: string;
-}
+import { IsNotEmpty, IsString } from 'class-validator';
 
+export class CreatePlayerDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  position: string;
+
+  @IsNotEmpty()
+  @IsString()
+  foot: string;
+
+  
+  
+  ownerId: string;
+}
 
 /*
 model Player {

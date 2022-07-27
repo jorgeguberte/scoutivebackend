@@ -11,10 +11,11 @@ export class PlayersController {
   constructor(private playersService: PlayersService) {}
 
   
+  /*CREATE*/
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createPlayerDto: CreatePlayerDto) {
-    return this.playersService.create(createPlayerDto);
+  create(@Body() createPlayerDto: CreatePlayerDto, @GetCurrentUserId() userId:string) {
+    return this.playersService.create(createPlayerDto, userId);
   }
 
   

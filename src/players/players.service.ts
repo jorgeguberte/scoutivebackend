@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, InternalServerErrorException } from '@nestjs/common';
+import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
@@ -6,18 +7,30 @@ import { Player } from './entities/player.entity';
 
 @Injectable()
 export class PlayersService {
-  constructor(private prisma: PrismaService){}
+  constructor(private prisma: PrismaService) {}
 
-  create(createPlayerDto: CreatePlayerDto) {
-    return 'This action adds a new player';
+  async create(createPlayerDto: CreatePlayerDto, @GetCurrentUserId() userId:string) {
+    try {
+      const newPlayer = await this.prisma.player.create({
+        data: {
+          name: createPlayerDto.name,
+          position: createPlayerDto.position,
+          foot: createPlayerDto.foot,
+          ownerId: userId,
+        },
+      });
+
+      return newPlayer;
+    } catch (err) {
+      throw new InternalServerErrorException();
+    }
   }
 
-  async findAll(userId:string):Promise<Player> {
-    console.log(`gonna find all players belonging to ${userId}`)
+  async findAll(userId: string): Promise<Player> {
+    console.log(`gonna find all players belonging to ${userId}`);
     const response = await this.prisma.player.findMany();
     console.log(response);
     return response;
-    
   }
 
   findOne(id: number) {
