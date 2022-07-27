@@ -12,7 +12,8 @@ export class PlayersService {
     return 'This action adds a new player';
   }
 
-  async findAll():Promise<Player> {
+  async findAll(userId:string):Promise<Player> {
+    console.log(`gonna find all players belonging to ${userId}`)
     const response = await this.prisma.player.findMany();
     console.log(response);
     return response;
@@ -20,7 +21,7 @@ export class PlayersService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} player`;
+    return `This action returnsss a #${id} player`;
   }
 
   update(id: number, updatePlayerDto: UpdatePlayerDto) {
