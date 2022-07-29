@@ -63,7 +63,6 @@ export class PlayersService {
         },
       })
       .catch((err) => {
-        console.log(err);
         throw new NotFoundException();
       });
   }
