@@ -1,4 +1,9 @@
-import {ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
@@ -9,7 +14,10 @@ import { Player } from './entities/player.entity';
 export class PlayersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createPlayerDto: CreatePlayerDto, @GetCurrentUserId() userId:string) {
+  async create(
+    createPlayerDto: CreatePlayerDto,
+    @GetCurrentUserId() userId: string,
+  ) {
     try {
       const newPlayer = await this.prisma.player.create({
         data: {
@@ -28,20 +36,19 @@ export class PlayersService {
 
   async findAll(userId: string): Promise<Player> {
     const response = await this.prisma.player.findMany();
-    if(!response) throw new NotFoundException();
+    if (!response) throw new NotFoundException();
     return response;
   }
 
   async findOne(id: string) {
     const response = await this.prisma.player.findUnique({
-      where:{
+      where: {
         id: id,
-      }
+      },
     });
-    if(!response) throw new NotFoundException();
+    if (!response) throw new NotFoundException();
 
     return response;
-    
   }
 
   update(id: string, updatePlayerDto: UpdatePlayerDto) {
@@ -49,19 +56,15 @@ export class PlayersService {
   }
 
   async remove(id: string) {
-    
-
-    
-    const deletePlayer = await this.prisma.player.delete({
-      where:{
-        id: id
-      }
-    })
-    .catch((err)=>{
-      console.log(err);
-      throw new NotFoundException();
-    });
-  
-    
+    const deletePlayer = await this.prisma.player
+      .delete({
+        where: {
+          id: id,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new NotFoundException();
+      });
   }
 }
