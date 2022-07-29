@@ -51,8 +51,20 @@ export class PlayersService {
     return response;
   }
 
-  update(id: string, updatePlayerDto: UpdatePlayerDto) {
-    return `This action updates a #${id} player`;
+  async update(id: string, updatePlayerDto: UpdatePlayerDto) {
+    const updatePlayer = await this.prisma.player.update({
+      where:{
+        id: id
+      },
+      data: updatePlayerDto
+    })
+    .catch((err)=>{
+      console.log(err);
+      throw new NotFoundException();
+    });
+    return updatePlayer;
+
+
   }
 
   async remove(id: string) {
