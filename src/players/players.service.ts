@@ -44,11 +44,11 @@ export class PlayersService {
     
   }
 
-  update(id: number, updatePlayerDto: UpdatePlayerDto) {
+  update(id: string, updatePlayerDto: UpdatePlayerDto) {
     return `This action updates a #${id} player`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} player`;
   }
 }
