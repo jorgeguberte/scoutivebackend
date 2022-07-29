@@ -37,6 +37,7 @@ export class PlayersController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string) {
     return this.playersService.remove(id);
   }

@@ -1,4 +1,4 @@
-import {Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
@@ -48,7 +48,20 @@ export class PlayersService {
     return `This action updates a #${id} player`;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} player`;
+  async remove(id: string) {
+    
+
+    
+    const deletePlayer = await this.prisma.player.delete({
+      where:{
+        id: id
+      }
+    })
+    .catch((err)=>{
+      console.log(err);
+      throw new NotFoundException();
+    });
+  
+    
   }
 }
