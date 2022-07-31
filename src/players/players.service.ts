@@ -4,8 +4,8 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { GetCurrentUserId } from '../common/decorators/get-current-user-id.decorator';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { Player } from './entities/player.entity';

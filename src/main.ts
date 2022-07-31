@@ -6,14 +6,14 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const swaggerConfig = new DocumentBuilder()
+  /*const swaggerConfig = new DocumentBuilder()
   .setTitle('Scoutive API')
   .setTitle('The main Scoutive platform backend')
   .setVersion('0.1')
   .build();
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api',app, swaggerDocument);
+  SwaggerModule.setup('api',app, swaggerDocument)*/
 
   const whitelist = ['http://localhost:3000','https://scoutiveui.herokuapp.com'];
   app.enableCors({

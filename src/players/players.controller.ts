@@ -25,6 +25,7 @@ export class PlayersController {
     @Body() createPlayerDto: CreatePlayerDto,
     @GetCurrentUserId() userId: string,
   ) {
+    
     return this.playersService.create(createPlayerDto, userId);
   }
 
