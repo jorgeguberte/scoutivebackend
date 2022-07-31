@@ -35,7 +35,11 @@ export class PlayersService {
   }
 
   async findAll(userId: string): Promise<Player> {
-    const response = await this.prisma.player.findMany();
+    const response = await this.prisma.player.findMany({
+      where:{
+        ownerId: userId
+      }
+    });
     if (!response) throw new NotFoundException();
     return response;
   }
