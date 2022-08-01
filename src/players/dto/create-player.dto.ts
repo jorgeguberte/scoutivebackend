@@ -2,37 +2,50 @@ import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePlayerDto {
-  @ApiProperty({
-    description: 'Full name of the player',
-  })
   @IsNotEmpty()
   @IsString()
   name: string;
 
- 
   @ApiProperty({ description: "Player's nickname. e.g: Ronaldinho" })
   @IsString()
   nickname?: string;
 
-  
-  
-  @ApiProperty({
-    description:
-      'The position adopted by the player. e.g: GK (Goalkeeper), RB (Right Back), ST (Striker). A full list of available positions will be in the roadmap.',
-  })
+  @IsString()
+  dob: string;
+
+  @IsString()
+  nationality: string;
+
+
+
   @IsNotEmpty()
   @IsString()
   position: string;
 
-  
-  @ApiProperty({
-    description:
-      "Player's strongest foot; R, L, B (if player is strong with both feet)",
-  })
   @IsNotEmpty()
   @IsString()
   foot: string;
 
+  @IsString()
+  height: string;
+
+  @IsString()
+  weight: string;
+  
+  /* TODO: Implement Club entity then relation it here
+  @IsString()
+  current_club: string;
+  */
+
+@IsString()
+contract: string;
+
+@IsString()
+rating: string;
+
+@IsString()
+img_src: string;
+  
   ownerId: string;
 }
 
@@ -50,7 +63,7 @@ model Player {
   foot      String
 
 
-        playerId,
+      playerId,
       name,
       nickname,
       dob,
@@ -59,12 +72,9 @@ model Player {
       foot,
       height,
       weight,
-      currentClub,
-      endOfContract,
-      generalRating,
-      physicalRating,
-      technicalRating,
-      tacticalRating,
-      photoSrc,
+      current_club,
+      contract{},
+      rating{general,physical, technical, tactical},
+      img_src
 }
 */
