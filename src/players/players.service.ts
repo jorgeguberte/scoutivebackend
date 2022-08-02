@@ -50,7 +50,8 @@ export class PlayersService {
         ownerId: userId
       }
     });
-    if (!response) throw new NotFoundException();
+    
+    if (!response || response.length == 0) return new NotFoundException();
     return response;
   }
 
@@ -60,7 +61,9 @@ export class PlayersService {
         id: id,
       },
     });
-    if (!response) throw new NotFoundException();
+    if (!response) return new NotFoundException();
+
+    
 
     return response;
   }
@@ -88,8 +91,11 @@ export class PlayersService {
           id: id,
         },
       })
+      .then(()=>{
+        return true;
+      })
       .catch((err) => {
-        throw new NotFoundException();
+        return new NotFoundException();
       });
   }
 }
