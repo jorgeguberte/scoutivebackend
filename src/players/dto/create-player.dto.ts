@@ -1,5 +1,6 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
 
 export class CreatePlayerDto {
 
@@ -21,6 +22,35 @@ export class CreatePlayerDto {
 
   @IsString()
   dob: string;
+
+  @IsString()
+  nationality: string;
+
+  @Type(()=>Number)
+  @IsNumber()
+  @IsOptional()
+  height: number;
+
+  @Type(()=>Number)
+  @IsOptional()
+  weight: number;
+
+  @IsString()
+  @IsOptional()
+  current_club: string;
+
+  @IsString()
+  @IsOptional()
+  contract: string;
+  
+  @Type(()=>Number)
+  @IsOptional()
+  rating: number;
+
+  
+  @IsString()
+  @IsOptional()
+  img_src: string;
 
 
   

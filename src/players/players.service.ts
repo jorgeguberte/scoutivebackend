@@ -26,12 +26,20 @@ export class PlayersService {
           foot: createPlayerDto.foot,
           nickname: createPlayerDto.nickname,
           dob: createPlayerDto.dob,
+          nationality: createPlayerDto.nationality,
+          height: createPlayerDto.height,
+          weight: createPlayerDto.weight,
+          current_club: createPlayerDto.current_club,
+          contract: createPlayerDto.contract,
+          rating: createPlayerDto.rating,
+          img_src: createPlayerDto.img_src,
           ownerId: userId,
         },
       });
 
       return newPlayer;
     } catch (err) {
+      console.log(err);
       throw new InternalServerErrorException();
     }
   }

@@ -34,4 +34,12 @@ model Player {
   foot      String
   nickname String?
   dob String?
+  nationality String?
+  height Int?
+  weight Int?
+  current_club  String?
+  contract String?
+  rating  Int?
+  img_src String?
+
 }
