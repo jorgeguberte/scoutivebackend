@@ -24,6 +24,8 @@ export class PlayersService {
           name: createPlayerDto.name,
           position: createPlayerDto.position,
           foot: createPlayerDto.foot,
+          nickname: createPlayerDto.nickname,
+          dob: createPlayerDto.dob,
           ownerId: userId,
         },
       });
