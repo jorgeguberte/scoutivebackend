@@ -1,4 +1,10 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpCode,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as bcrypt from 'bcrypt';
@@ -6,18 +12,14 @@ import * as argon from 'argon2';
 import { Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 
-
 /*
 #FIXME: When sending a refresh request against a logged-out user, an exception is raised because there's no rtHash associated with the user in the database.
 So we need to check if the user has a rtHash stored (thus being logged in) BEFORE running it through argon, and prevent the error from happening.
 */
 
-
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
-
-  
 
   async getTokens(userId: string, email: string): Promise<Tokens> {
     const [at, rt] = await Promise.all([
@@ -63,51 +65,52 @@ export class AuthService {
     return tokens;
   }
 
-  async signinLocal(dto: AuthDto):Promise<Tokens> {
-     const user = await this.prisma.user.findUnique({
-      where:{
-        email: dto.email
-      }
-     })
+  async signinLocal(dto: AuthDto): Promise<Tokens> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: dto.email,
+      },
+    });
 
-     if(!user) throw new ForbiddenException('Access Denied');
+    if (!user) throw new ForbiddenException('Access Denied');
 
-     //const passwordMatches = await bcrypt.compare(dto.password, user.hash);
-     const passwordMatches = await argon.verify(user.hash, dto.password);
-     if(!passwordMatches) throw new ForbiddenException('Access....DENIED!');
+    //const passwordMatches = await bcrypt.compare(dto.password, user.hash);
+    const passwordMatches = await argon.verify(user.hash, dto.password);
+    if (!passwordMatches) throw new ForbiddenException('Access....DENIED!');
 
-     const tokens = await this.getTokens(user.id, user.email);
-     await this.updateRtHash(user.id, tokens.refresh_token);
-     return tokens;
-     
+    const tokens = await this.getTokens(user.id, user.email);
+    await this.updateRtHash(user.id, tokens.refresh_token);
+    return tokens;
   }
 
   async logout(userId: string) {
-    await this.prisma.user.updateMany({
+    const logoutBuffer = await this.prisma.user.updateMany({
       where: {
         id: userId,
         hashedRt: {
           not: null,
         },
       },
-      data:{
-        hashedRt: null
-      }
+      data: {
+        hashedRt: null,
+      },
     });
+    if (!logoutBuffer) throw new InternalServerErrorException();
+    else return true;
   }
 
-  async refreshTokens(userId:string, rt: string) {
+  async refreshTokens(userId: string, rt: string) {
     const user = await this.prisma.user.findUnique({
-      where:{
-        id: userId
-      }
+      where: {
+        id: userId,
+      },
     });
 
-    if(!user || !user.hashedRt) throw new ForbiddenException('access denied');
+    if (!user || !user.hashedRt) throw new ForbiddenException('access denied');
 
     //const rtMatches = bcrypt.compare(rt, user.hashedRt);
     const rtMatches = await argon.verify(user.hashedRt, rt);
-    if(!rtMatches) throw new ForbiddenException('access denied');
+    if (!rtMatches) throw new ForbiddenException('access denied');
 
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRtHash(user.id, tokens.refresh_token);

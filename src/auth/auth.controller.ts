@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, InternalServerErrorException, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
@@ -29,7 +29,15 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId:string) {
-    return this.authService.logout(userId);
+    //return this.authService.logout(userId);
+    if (this.authService.logout(userId)) {
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Logged out'
+      };
+    }else{
+      throw new InternalServerErrorException();
+    }
   }
 
   @Public()
