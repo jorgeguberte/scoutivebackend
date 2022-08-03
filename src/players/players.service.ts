@@ -1,5 +1,7 @@
 import {
   ForbiddenException,
+  HttpCode,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -94,9 +96,16 @@ export class PlayersService {
       .catch(()=>{
         return null;
       })
-      console.log(deletePlayer);
+
+
+      // TODO: Streamline this
       if(!deletePlayer){
         return new NotFoundException();
+      }else{
+        return {"response":{
+          "status_code": HttpStatus.OK,
+          "message":"Player deleted successfully."
+        }}
       }
   }
 
