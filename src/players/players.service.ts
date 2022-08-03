@@ -76,9 +76,9 @@ export class PlayersService {
       data: updatePlayerDto
     })
     .catch((err)=>{
-      console.log(err);
-      throw new NotFoundException();
+      return new NotFoundException();
     });
+    
     return updatePlayer;
 
 
@@ -91,11 +91,14 @@ export class PlayersService {
           id: id,
         },
       })
-      .then(()=>{
-        return true;
+      .catch(()=>{
+        return null;
       })
-      .catch((err) => {
+      console.log(deletePlayer);
+      if(!deletePlayer){
         return new NotFoundException();
-      });
+      }
   }
+
+  
 }
