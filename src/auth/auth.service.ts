@@ -1,9 +1,12 @@
 import {
+  BadRequestException,
   ForbiddenException,
   HttpCode,
+  HttpException,
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
@@ -52,17 +55,23 @@ export class AuthService {
   }
 
   async signupLocal(dto: AuthDto): Promise<Tokens> {
-    const hash = await argon.hash(dto.password);
-    const newUser = await this.prisma.user.create({
-      data: {
-        email: dto.email,
-        hash,
-      },
-    });
+    try {
+      const hash = await argon.hash(dto.password);
+      const newUser = await this.prisma.user.create({
+        data: {
+          email: dto.email,
+          hash,
+        },
+      });
 
-    const tokens = await this.getTokens(newUser.id, newUser.email);
-    await this.updateRtHash(newUser.id, tokens.refresh_token);
-    return tokens;
+      //#TODO: Find out how to raise error here to be treated in the catch block
+
+      const tokens = await this.getTokens(newUser.id, newUser.email);
+      await this.updateRtHash(newUser.id, tokens.refresh_token);
+      return tokens;
+    } catch (err) {
+      throw new UnprocessableEntityException();
+    }
   }
 
   async signinLocal(dto: AuthDto): Promise<Tokens> {
