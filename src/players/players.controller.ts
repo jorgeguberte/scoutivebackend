@@ -13,7 +13,9 @@ import { PlayersService } from './players.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { GetCurrentUserId, Public } from 'src/common/decorators';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Player')
 @Controller('player')
 export class PlayersController {
   constructor(private playersService: PlayersService) {}
@@ -25,7 +27,6 @@ export class PlayersController {
     @Body() createPlayerDto: CreatePlayerDto,
     @GetCurrentUserId() userId: string,
   ) {
-    
     return this.playersService.create(createPlayerDto, userId);
   }
 
