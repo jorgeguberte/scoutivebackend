@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { AtGuard } from './common/guards';
 import { PrismaModule } from './prisma/prisma.module';
 import { PlayersModule } from './players/players.module';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [AuthModule, PrismaModule, PlayersModule],
@@ -11,7 +12,8 @@ import { PlayersModule } from './players/players.module';
     {
       provide: APP_GUARD,
       useClass: AtGuard
-    }
+    },
+    PrismaService
   ]
 })
 export class AppModule {}
