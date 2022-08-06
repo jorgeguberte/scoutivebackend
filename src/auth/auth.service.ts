@@ -81,9 +81,19 @@ export class AuthService {
       },
     });
 
+    //No user found
     if (!user) throw new ForbiddenException('Access Denied');
+    
+    //User found, check for authToken
+    console.log(user.hashedRt);
+    if(user.hashedRt != null){
+      throw new BadRequestException('User already logged in');
+    }else{
+      console.log('gonna try');
+    }
 
-    //const passwordMatches = await bcrypt.compare(dto.password, user.hash);
+    
+
     const passwordMatches = await argon.verify(user.hash, dto.password);
     if (!passwordMatches) throw new ForbiddenException('Access....DENIED!');
 
