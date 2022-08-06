@@ -10,7 +10,7 @@ export class PrismaService
     super({
       datasources: {
         db: {
-          url: 'mongodb+srv://scoutiveuser:LdMTdFlNWqGfZe33@cluster0.d3i0s.mongodb.net/mydb?retryWrites=true&w=majority',
+          url: '',
         },
       },
     });

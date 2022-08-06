@@ -9,11 +9,14 @@ A platform targeted at soccer scouts and agents, aiming to streamline their scou
 - Typescript
 - MongoDB
 - Prisma
+- Heroku
 
 v0.0.4  
 The API has endpoints for Auth flow and Player CRUD operations.
 
 Roadmap: Tests, standardization of responses
+
+
 
 [Documentation](https://scoutive-backend.herokuapp.com/docs)
 
