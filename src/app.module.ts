@@ -5,6 +5,7 @@ import { AtGuard } from './common/guards';
 import { PrismaModule } from './prisma/prisma.module';
 import { PlayersModule } from './players/players.module';
 import { PrismaService } from './prisma/prisma.service';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [AuthModule, PrismaModule, PlayersModule],
