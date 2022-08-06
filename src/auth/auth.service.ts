@@ -85,12 +85,11 @@ export class AuthService {
     if (!user) throw new ForbiddenException('Access Denied');
     
     //User found, check for authToken
+    console.log(user.hashedRt);
     if(user.hashedRt != null){
       throw new BadRequestException('User already logged in');
     }else{
-      /*
-      * User was not already logged in
-      */
+      console.log('gonna try');
     }
 
     
