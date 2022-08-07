@@ -6,7 +6,7 @@ import { Tokens } from './types';
 import { Request } from 'express';
 import { AtGuard, RtGuard } from '../common/guards';
 import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiAcceptedResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -22,6 +22,7 @@ export class AuthController {
 
   @Public()
   @Post('local/signin')
+  @ApiResponse({status: 200, description: 'Tokens created'})
   @HttpCode(HttpStatus.OK)
   signinLocal(@Body() dto: AuthDto): Promise<Tokens> {
     return this.authService.signinLocal(dto);
@@ -29,6 +30,8 @@ export class AuthController {
 
   //@UseGuards(AtGuard)
   @Post('logout')
+  @ApiResponse({status: HttpStatus.OK, description: 'Logged out'})
+  @ApiUnauthorizedResponse({description: 'Unauthorized'})
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId:string) {
     //return this.authService.logout(userId);
@@ -44,7 +47,8 @@ export class AuthController {
 
   @Public()
   @UseGuards(RtGuard)
-  @Post('refresh')
+  @Post('refresh')  
+  @ApiAcceptedResponse({description: 'Tokens refreshed'})
   @HttpCode(HttpStatus.OK)
   refreshTokens(@GetCurrentUserId() userId:string,  @GetCurrentUser('refreshToken') refreshToken:string) {
     return this.authService.refreshTokens(userId, refreshToken);

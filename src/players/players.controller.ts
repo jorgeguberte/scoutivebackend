@@ -13,7 +13,8 @@ import { PlayersService } from './players.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { GetCurrentUserId, Public } from 'src/common/decorators';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiOkResponse } from '@nestjs/swagger';
+
 
 @ApiTags('Player')
 @Controller('player')
@@ -21,7 +22,8 @@ export class PlayersController {
   constructor(private playersService: PlayersService) {}
 
   /*CREATE*/
-  @Post('create')
+  @ApiResponse({status:201, description: 'Player created'}) //swagger
+    @Post('create')
   @HttpCode(HttpStatus.CREATED)
   create(
     @Body() createPlayerDto: CreatePlayerDto,
@@ -30,7 +32,10 @@ export class PlayersController {
     return this.playersService.create(createPlayerDto, userId);
   }
 
+  
   @Post('all')
+
+  @ApiResponse({status: 200, description: 'Retrieving all players'})
   @HttpCode(HttpStatus.OK)
   findAll(@GetCurrentUserId() userId: string) {
     return this.playersService.findAll(userId);
@@ -48,6 +53,7 @@ export class PlayersController {
   }
 
   @Delete(':id')
+  @ApiOkResponse({description: 'Player deleted'})
   @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string) {
     return this.playersService.remove(id);

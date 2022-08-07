@@ -41,12 +41,12 @@ export class PlayersService {
 
       return newPlayer;
     } catch (err) {
-      console.log(err);
       throw new InternalServerErrorException();
     }
   }
 
   async findAll(userId: string): Promise<Player> {
+    throw new NotFoundException();
     const response = await this.prisma.player.findMany({
       where:{
         ownerId: userId
