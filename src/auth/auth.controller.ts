@@ -6,7 +6,7 @@ import { Tokens } from './types';
 import { Request } from 'express';
 import { AtGuard, RtGuard } from '../common/guards';
 import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators';
-import { ApiAcceptedResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiAcceptedResponse, ApiBadRequestResponse, ApiForbiddenResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -23,6 +23,7 @@ export class AuthController {
   @Public()
   @Post('local/signin')
   @ApiResponse({status: 200, description: 'Tokens created'})
+  @ApiBadRequestResponse({description: 'When client requests token if token already exists.'})
   @HttpCode(HttpStatus.OK)
   signinLocal(@Body() dto: AuthDto): Promise<Tokens> {
     return this.authService.signinLocal(dto);
@@ -49,6 +50,8 @@ export class AuthController {
   @UseGuards(RtGuard)
   @Post('refresh')  
   @ApiAcceptedResponse({description: 'Tokens refreshed'})
+  @ApiForbiddenResponse({description: 'If the client tries to refresh while logged out, this will be returned'})
+
   @HttpCode(HttpStatus.OK)
   refreshTokens(@GetCurrentUserId() userId:string,  @GetCurrentUser('refreshToken') refreshToken:string) {
     return this.authService.refreshTokens(userId, refreshToken);
