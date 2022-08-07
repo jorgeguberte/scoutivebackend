@@ -16,6 +16,7 @@ export class AuthController {
   @Public()
   @Post('local/signup')
   @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({status: 200, description: 'User created scuccessfully'})
   signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
     return this.authService.signupLocal(dto);
   }
@@ -23,7 +24,7 @@ export class AuthController {
   @Public()
   @Post('local/signin')
   @ApiResponse({status: 200, description: 'Tokens created'})
-  @ApiBadRequestResponse({description: 'When client requests token if token already exists.'})
+  @ApiBadRequestResponse({description: 'Already signed in'})
   @HttpCode(HttpStatus.OK)
   signinLocal(@Body() dto: AuthDto): Promise<Tokens> {
     return this.authService.signinLocal(dto);
@@ -50,7 +51,7 @@ export class AuthController {
   @UseGuards(RtGuard)
   @Post('refresh')  
   @ApiAcceptedResponse({description: 'Tokens refreshed'})
-  @ApiForbiddenResponse({description: 'If the client tries to refresh while logged out, this will be returned'})
+  @ApiForbiddenResponse({description: 'Could not refresh tokens'})
 
   @HttpCode(HttpStatus.OK)
   refreshTokens(@GetCurrentUserId() userId:string,  @GetCurrentUser('refreshToken') refreshToken:string) {

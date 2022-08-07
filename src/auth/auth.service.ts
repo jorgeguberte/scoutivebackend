@@ -122,11 +122,11 @@ export class AuthService {
       },
     });
 
-    if (!user || !user.hashedRt) throw new ForbiddenException('access denied');
+    if (!user || !user.hashedRt) throw new ForbiddenException('Could not refresh tokens');
 
     //const rtMatches = bcrypt.compare(rt, user.hashedRt);
     const rtMatches = await argon.verify(user.hashedRt, rt);
-    if (!rtMatches) throw new ForbiddenException('access denied');
+    if (!rtMatches) throw new ForbiddenException('Could not refresh tokens');
 
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRtHash(user.id, tokens.refresh_token);
