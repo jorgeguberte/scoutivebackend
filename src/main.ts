@@ -19,6 +19,7 @@ async function bootstrap() {
   const whitelist = [
     'http://localhost:3000',
     'https://scoutiveui.herokuapp.com',
+    'https://scoutiveapp.azurewebsites.net',
   ];
   app.enableCors({
     origin: function (origin, callback) {

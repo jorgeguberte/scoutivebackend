@@ -70,7 +70,8 @@ export class AuthService {
       await this.updateRtHash(newUser.id, tokens.refresh_token);
       return tokens;
     } catch (err) {
-      throw new UnprocessableEntityException();
+      console.log(err);
+      throw new UnprocessableEntityException('Could not create user');
     }
   }
 
